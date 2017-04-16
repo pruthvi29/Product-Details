@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html data-ng-app="product">
+<head>
+<meta charset="ISO-8859-1">
+<title>Product Details</title>
+<link rel="stylesheet" href="./css/bootstrap.min.css" />
+<link rel="stylesheet" href="./css/custom.css" />
+<script type="text/javascript" src="./lib/jquery.min.js"></script>
+<script type="text/javascript" src="./lib/bootstrap.min.js"></script>
+<script type="text/javascript" src="./lib/angular.min.js"></script>
+<script type="text/javascript" src="./js/app.js"></script>
+
+</head>
+<body class="container" data-ng-controller="detailsController">
+	<div id="products" class="row list-group">
+		<div class="item  col-xs-4 col-lg-4"
+			data-ng-repeat="product in products" data-ng-show="isFinished">
+
+			<div class="thumbnail">
+				<img class="group list-group-image" src="{{product.imagePath}}"
+					alt="product.category" />
+				<div class="row">
+					<div class="col-xs-12 col-md-6">
+						<p class="lead">{{product.category}}</p>
+					</div>
+					<div class="col-xs-12 col-md-6">
+						<a class="btn btn-success"
+							data-ng-click="product.isSize = (product.isSize == false)?true:false;">Add
+							To Cart</a>
+					</div>
+				</div>
+				<div class="row" data-ng-show="product.isSize">
+					<div class="col-md-6">Size:</div>
+					<div class="col-md-6">
+						<select class="form-control" data-ng-model="size"
+							data-ng-change="product.isQuantity = true;">
+							<option value="">SELECT</option>
+							<option value="0">0-3 Months</option>
+							<option value="3">3-6 Months</option>
+							<option value="6">6-12 Months</option>
+						</select>
+					</div>
+
+				</div>
+
+				<div class="row" data-ng-show="product.isSize && product.isQuantity">
+					<div class="col-md-6">Quantity</div>
+					<div class="col-md-6">
+						<input class="form-control" data-ng-model="quantity" type="number"
+							data-ng-keyup="quantityAndDiscount($index,quantity)" />
+					</div>
+
+				</div>
+
+				<div class="row"
+					data-ng-show="product.isSize && product.isQuantity && product.isNotEmpty">
+					<div class="col-md-6">Price</div>
+					<div class="col-md-6">
+						<div>Per Quantity: {{product.price - product.discountPrice}}</div>
+						<div>Discount : {{product.discount}}%</div>
+						<div>Total : {{(product.price -
+							product.discountPrice)*quantity}}</div>
+					</div>
+					<div class="col-md-12 col-md-offset-3">
+						<a class="btn btn-success"
+							data-ng-click="product.isAddress = (product.isAddress == false)?true:false;gotoBottom();">Enter
+							Shipping Address</a>
+					</div>
+				</div>
+
+				<div class="row"
+					data-ng-show="product.isSize && product.isQuantity && product.isNotEmpty && product.isAddress">
+					<form name="customerForm" novalidate>
+						<div class="col-md-8 col-md-offset-2">
+							First Name:<input type="text" name="firstname"
+								data-ng-model="product.firstname" required />
+							<p ng-show="customerForm.product.firstname.$invalid && !customerForm.product.firstname.$pristine"
+								class="help-block">You first name is required.</p>
+						</div>
+
+						<div class="col-md-8 col-md-offset-2">
+							Last Name:<input type="text" name="lastname"
+								data-ng-model="product.lastname" required />
+								<p ng-show="customerForm.product.lastname.$invalid && !customerForm.product.lastname.$pristine"
+								class="help-block">You last name is required.</p>
+						</div>
+
+						<div class="col-md-8 col-md-offset-2">
+							Street Address Line 1:<input type="text"
+								name="streetAddressLine1" required
+								data-ng-model="product.streetAddressLine1" />
+								<p ng-show="customerForm.product.lastname.$invalid && !customerForm.product.lastname.$pristine"
+								class="help-block">You street address line 1 is required.</p>
+						</div>
+
+						<div class="col-md-8 col-md-offset-2">
+							Street Address Line 2:<input type="text"
+								name="streetAddressLine2" required
+								data-ng-model="product.streetAddressLine2" />
+								<p ng-show="customerForm.product.streetAddressLine2.$invalid && !customerForm.product.streetAddressLine2.$pristine"
+								class="help-block">You street address line 2 is required.</p>
+						</div>
+
+						<div class="col-md-6 col-md-offset-2">
+							Phone<input type="number" name="phone" required
+								data-ng-model="product.phone" />
+								<p ng-show="customerForm.product.phone.$invalid && !customerForm.product.phone.$pristine"
+								class="help-block">You phone is required.</p>
+						</div>
+
+						<div class="col-md-6 col-md-offset-2">
+							<input type="submit" class="btn btn-success" data-ng-click="finish(product)"  data-ng-disabled="customerForm.$invalid" />
+						</div>
+					</form>
+				</div>
+			</div>
+
+
+
+		</div>
+		<div data-ng-hide="isFinished">
+			<div class="row">
+				<div class="col-md-12 col-md-offset-2">
+					Hi,
+					<p>
+						<b>Thank you for your order!</b>
+					</p>
+				</div>
+				<div class="col-md-12 col-md-offset-2">Here's a summary of
+					your purchase. When we ship the item, we will send an update with
+					tracking details.</div>
+
+				<div class="col-md-12 col-md-offset-2">
+					<p>Delivery Address:</p>
+					<div>
+						Name:<b>{{finalProductDetails.firstname}}{{finalProductDetails.lastname}}</b>
+					</div>
+					<div>
+						Address line 1:<b>{{finalProductDetails.streetAddressLine1}}</b>
+					</div>
+					<div>
+						Address line 2:<b>{{finalProductDetails.streetAddressLine2}}</b>
+					</div>
+					<div>
+						Phone Number:<b>{{finalProductDetails.phone}}</b>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<a id="bottom"></a>
+</body>
+</html>
