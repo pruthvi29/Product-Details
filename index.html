@@ -46,8 +46,8 @@
 				<div class="row" data-ng-show="product.isSize && product.isQuantity">
 					<div class="col-md-6">Quantity</div>
 					<div class="col-md-6">
-						<input class="form-control" data-ng-model="quantity" type="number"
-							data-ng-keyup="quantityAndDiscount($index,quantity)" />
+						<input class="form-control" data-ng-model="quantity" type="number" min="0"
+							data-ng-keyup="quantityAndDiscount($index,quantity)" data-ng-change="quantityAndDiscount($index,quantity)" data-ng-keypress="quantityAndDiscount($index,quantity)" />
 					</div>
 
 				</div>
